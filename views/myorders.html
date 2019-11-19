@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>极客营欢迎你！</title>
+    <link rel="stylesheet" href="http://localhost:8080/css/bootstrap.min.css" />
+    <script src="http://localhost:8080/js/jquery-3.4.1.min.js" type="text/javascript"></script>
+    <script src="http://localhost:8080/js/bootstrap.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="http://localhost:8080/css/common.css">
+    <link rel="stylesheet" href="http://localhost:8080/css/reset.css">
+    <script src="http://localhost:8080/js/template-web.js"></script>
+    <script src="http://localhost:8080/js/common.js"></script>
+    <style>
+        #table tr{
+            font-weight: bolder;
+            font-size: 15px;
+            height: 35px;
+        }
+        #table{
+            width: 80%;
+            margin: 0px auto;
+        }
+        #table tr th{
+            padding-left: 10px;
+        }
+        #table tr th:first-child{
+            width: 260px;
+        }
+        #table tr th:nth-child(2){
+            width: 280px;
+        }
+        #table tr th:nth-child(3){
+            width: 180px;
+        }
+        #table tr th:nth-child(4){
+            width: 110px;
+        }
+        #table tr th:nth-child(5){
+            width: 130px;
+        }
+        #bottomhref a{
+            font-size: 14px;
+            margin-right: 10px;
+            text-decoration: none;
+        }
+        #bottomhref a:first-child{
+            margin-left: 385px;
+        }
+        #bottom{
+            margin-top: 8px;
+        }
+        #bottom a{
+            color: black;
+            margin-right: 5px;
+            text-decoration: none;
+        }
+        #bottom a:first-child{
+            margin-left: 550px;
+        }
+        #menu{
+            width: 1300px !important;
+            margin: 0px auto !important;
+        }
+    </style>
+    <script id="pageTempl" type="text/html">
+        {{if pagenum==1}}
+            <li class="disabled">
+                <a href="#" >
+                    <span >&laquo;</span>
+                </a>
+            </li>
+        {{else}}
+            <li>
+                <a href="javascript:void(0)" onclick="query({{pagenum-1}})" >
+                    <span >&laquo;</span>
+                </a>
+            </li>
+        {{/if}}
+
+
+        <% for(let i=1;i<=pagecount;i++){%>
+            <% if(i==pagenum){%>
+                <li class="active"><a href="javascript:void(0)" onclick="query(<%=i%>)"><%=i%></a></li>
+            <%}else{%>
+                <li><a href="javascript:void(0)" onclick="query(<%=i%>)"><%=i%></a></li>
+            <%}
+        }%>
+
+
+        {{if pagenum==pagecount}}
+            <li class="disabled">
+                <a href="#" >
+                    <span >&raquo;</span>
+                </a>
+            </li>
+        {{else}}
+            <li>
+                <a href="javascript:void(0)" onclick="query({{pagenum+1}})" >
+                    <span >&raquo;</span>
+                </a>
+            </li>
+        {{/if}}
+    </script>
+    <script id="orderTempl" type="text/html">
+        
+        <table class="table table-bordered" id="table">
+            <tr class="success">
+                <th colspan="5">
+                    订单编号：<span>{{uuid}}</span>
+                    <span style="margin-left: 10px">支付状态：<span style="color: #337AB7">{{orderStatus}}</span></span>
+                    <span style="margin-left: 10px">下单时间：<span>{{time}}</span></span>
+                    <span style="margin-left: 10px">总金额：<span>{{allMoney}}</span></span>
+                </th>
+            </tr>
+            <tr class="warning">
+                <th>图片</th>
+                <th>商品</th>
+                <th>价格</th>
+                <th>数量</th>
+                <th>小计</th>
+            </tr>
+            {{each pro}}
+            <tr class="active" >
+                <td>
+                    <img src="http://localhost:8080/img/{{$value.pimage}}" style="width: 75px;height:65px;margin-top: 10px;margin-bottom: 10px;margin-left: 15px">
+                </td>
+                <td>
+                    <span style="color: #337AB7;margin-left:10px">{{$value.pname}}</span>
+                </td>
+                <td>
+                    ￥<span style="margin-left:10px">{{$value.shop_price}}</span>
+                </td>
+                <td>
+                    <span style="margin-left:10px">{{$value.number}}</span>
+                </td>
+                <td>
+                    ￥<span style="margin-left:10px">{{$value.allmoney}}</span>
+                </td>
+            </tr>
+            {{/each}}
+    </table>
+    </script>
+
+    <script>
+		$(function(){
+            query(1);
+        })
+        
+        function query(pagenum){
+            var userid=$("#userid").val();
+            $("#pagenum").val(pagenum);
+            $.ajax({
+                type: "post",
+                url: "http://localhost:8080/igeek/orders",
+                data: $("#queryform").serialize(),
+                dataType: "json",
+                success: function (obj) {
+
+                    $("#box").empty();
+                    $(".pagination").empty();
+
+                    var data=obj.data;
+                    console.log(data);
+                    for (let i = 0; i < data.length; i++) {
+                        let data1=data[i];
+                        var html = template("orderTempl",data1);
+                        $("#box").append(html);
+                    }
+
+                    //分页渲染
+                    html = template("pageTempl", obj.pagnation);
+                    console.log(obj.pagnation);
+                    $(".pagination").append(html);
+                    
+
+                }
+            });
+
+        }
+    </script>
+</head>
+<body>
+    <form class="form-inline" id="queryform">
+        <input type="hidden" name="userid" id="userid" value="zs" >
+        <!-- 你要查询的页数 -->
+        <input type="hidden" name="pagenum" id="pagenum" value=""/>
+        <!-- 一页显示的条数 -->
+        <input type="hidden" name="pagesize" id="pagesize" value="2"/>
+    </form>  
+        <div style="font-weight: bolder;margin-left: 130px;font-size: 15px">
+            <span>我的订单</span>
+        </div>
+        <div style="margin:0px auto" id="box">
+       
+            
+        </div>
+       <!--  <div>
+            <table class="table table-bordered" id="table2">
+            </table>
+                
+        </div> -->
+
+        <div class="input-group" style="padding-left: 585px;padding-top:40px" >
+            <!-- <input type="button" value="&#171" class="form-control" style="width:40px;cursor: pointer" />
+            <input type="button" value="1" class="form-control" style="width:40px;cursor: pointer;background: #337AB7;color:cornsilk;border: #337AB7"/>
+            <input type="button" value="2" class="form-control" style="width:40px;cursor: pointer" />
+            <input type="button" value="&#187" class="form-control" style="width:40px;cursor: pointer" /> -->
+            <nav class="pull-right">
+                <ul class="pagination" style="margin-top: 0px auto;" >
+                    
+                </ul>
+            </nav>
+        </div>
+        
+        
+</body>
+</html>

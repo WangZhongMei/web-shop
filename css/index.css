@@ -1,0 +1,110 @@
+
+/* swiper  start*/
+.swiper {
+    padding: 0;
+}
+.swiper-container {
+    width: 100%;
+    height: 100%;
+}
+.swiper-slide {
+text-align: center;
+font-size: 18px;
+background: #fff;
+
+/* Center slide text vertically */
+display: -webkit-box;
+display: -ms-flexbox;
+display: -webkit-flex;
+display: flex;
+-webkit-box-pack: center;
+-ms-flex-pack: center;
+-webkit-justify-content: center;
+justify-content: center;
+-webkit-box-align: center;
+-ms-flex-align: center;
+-webkit-align-items: center;
+align-items: center;
+}
+.swiper-slide img {
+    width: 100%;
+}
+/* swiper  end*/
+
+/* 首页start */
+/* 热门商品 */
+.hot-pro img {
+    width: 100%;
+}
+.pro-title {
+    margin-top: 14px;
+    overflow: hidden;
+    padding: 0 0 6px 14px;
+}
+.pro-title h4 {
+    font-size: 24px;
+    float: left;
+    line-height: 30px;
+    margin-right: 8px;
+}
+.pro-img1 {
+    height: 186px;
+}
+.hot-pro li {
+    text-align: center;
+    height: 196px;
+}
+.hot-pro li p {
+    line-height: 15px;
+    height: 33px;
+    padding-top: 6px;
+}
+.hot-pro li p:last-child {
+    color: red;
+}
+.hot-pro li.col-md-4 img {
+    margin-top: 10px;
+    height: 126px;
+}
+.hot-pro li:hover {
+	box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+	transform: translate3d(0,-2px,0);
+}
+
+.img-ad {
+    margin-top: 10px;
+}
+/* 首页 end */
+
+/* 登陆页面 start */
+.login-box {
+    width: 100%;
+    height: 400px;
+    position: relative;
+    background: #FF2C4C;
+}
+.login-bg {
+    height: 100%;
+    position: absolute;
+    left: 7%;
+}
+.login-form {
+    background: #fff;
+    border-radius: 4px;
+    margin-top: 60px;
+    padding: 20px 30px;
+}
+.login-form h4 {
+    margin-bottom: 8px;
+}
+.login-form h4 span {
+    font-size: 16px;
+}
+ .login-btn {
+    background: url(../img/images/login.gif) top left;
+    width: 100px;
+    color: #fff;
+    text-align: center;
+}
+
+/* 登陆页面 end */

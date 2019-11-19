@@ -1,0 +1,65 @@
+
+/*产品列表*/
+.prolist-box{
+	margin: 0px auto;
+	float: none!important;
+}
+.top-guide{
+	height: 50px;
+	line-height: 50px;
+	padding-left: 10px;
+	font-size: 14px;
+	background-color: #F5F5F5;
+	color: #337AB7;
+	margin-bottom: 20px;
+}
+.content{
+	overflow: hidden;
+	text-align: center;
+}
+.content li {
+	margin-bottom: 10px;
+}
+.content li:hover img{
+	transition: all 0.3s;
+	transform: scale(1.02);
+}
+.c{
+	width: 100%;
+}
+.p1{
+	color: #639848;
+	font-size: 12px;
+	line-height: 15px;
+    height: 33px;
+    padding-top: 6px;
+}
+.p2{
+	color: #FF0000;
+	font-size: 14px;
+	line-height: 15px;
+    height: 33px;
+    padding-top: 6px;
+}
+.menu3-bottom{
+	width: 1000px;
+	height: 180px;
+	border: 1px solid #EAEAEA;
+	border-top: 2px solid #BCBCBC;
+}
+.liulanjilu{
+	width: 80px;
+	height: 180px;
+	float: left;
+}
+.more{
+	/* display: inline-block; */
+	color: #337AB7;
+	float: right;
+	padding-right: 10px;
+}
+
+.menu3-bottom img{
+	width: 140px;
+	padding:20px;
+}

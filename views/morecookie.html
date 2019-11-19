@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>极客营欢迎你！</title>
+		<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/prolist.css" />
+		<link rel="stylesheet" type="text/css" href="http://localhost:8080/fonts/font/iconfont.css" />
+		<link rel="stylesheet" href="http://localhost:8080/css/bootstrap.min.css">
+		<link rel="stylesheet" href="http://localhost:8080/css/common.css">
+		<link rel="stylesheet" href="http://localhost:8080/css/reset.css">
+		<script src="http://localhost:8080/js/jquery-3.4.1.min.js"></script>
+		<script src="http://localhost:8080/js/bootstrap.min.js"></script>
+		<script src="http://localhost:8080/js/template-web.js"></script>
+		<script src="http://localhost:8080/js/common.js"></script>
+		<script type="text/html" id="prolistTempl">
+		   {{each prolist}}
+			<li class="guide col-md-2 col-sm-4 col-xs-2">
+			  <a href="javascript:(0);" onclick="prodetails('{{$value.pid}}')">
+				<img src="http://localhost:8080/img/{{$value.pimage}}" alt="" class="c"/>
+				<p  class="p1">{{$value.pname}}</p>
+				<p class="p2">￥<span id="proPrice">{{$value.shop_price}}</span></p>
+			  </a>
+			</li>
+			{{/each}}
+		</script>
+		<script id="procookieTempl" type="text/html">
+			<img src="http://localhost:8080/img/{{pimage}}"/>
+		</script>
+		<script type="text/html" id="pageTempl">
+			{{if pagenum==1}}
+				<li class="disabled">
+					<a href="#" >
+						<span >&laquo;</span>
+					</a>
+				</li>
+			{{else}}
+				<li>
+					<a href="javascript:void(0)" onclick="query({{pagenum-1}})" >
+						<span >&laquo;</span>
+					</a>
+				</li>
+			{{/if}}
+	
+	
+			<% for(let i=1;i<=pagecount;i++){%>
+				<% if(i==pagenum){%>
+					<li class="active"><a href="javascript:void(0)" onclick="query(<%=i%>)"><%=i%></a></li>
+				<%}else{%>
+					<li><a href="javascript:void(0)" onclick="query(<%=i%>)"><%=i%></a></li>
+				<%}
+			}%>
+	
+	
+			{{if pagenum==pagecount}}
+				<li class="disabled">
+					<a href="#" >
+						<span >&raquo;</span>
+					</a>
+				</li>
+			{{else}}
+				<li>
+					<a href="javascript:void(0)" onclick="query({{pagenum+1}})" >
+						<span >&raquo;</span>
+					</a>
+				</li>
+			{{/if}}
+		</script>
+		<script id="moreTempl">
+			<a href="http://localhost:8080/static/prolist.html?cid={{cid}}">返回</a>
+		</script>
+		<script>
+			function prodetails(pid){
+				window.location.href="http://localhost:8080/static/proDetails.html?bid="+pid;
+			};
+			
+			// cookie
+			$(function(){
+				var condition = window.location.search;
+				var cidstr = condition.substr(1,condition.length-1);
+				var cidarr = cidstr.split("=");
+				var cid = cidarr[1];
+				$("#cid").val(cid);
+				query(1);
+
+			});
+			
+			function query(pagenum){
+				$("#pagenum").val(pagenum);
+				$("#prolist").empty();
+				$(".pagination").empty();
+				$.ajax({
+					type: "post",
+					url: "http://localhost:8080/igeek/procookie",
+					// data:$("#form1").serialize(),
+					dataType: "json",
+					success: function (data) {
+						console.log(data);
+						//根据data数据和bookTempl模板来渲染动态数据
+						var html = template("prolistTempl",data);
+						//console.log(html);
+						$("#prolist").append(html);
+
+						/* html = template("pageTempl", data.pagnation);
+						$(".pagination").append(html); */
+						html = template("moreTempl", data);
+						$(".top-guide").append(html);
+					}
+				});
+			}      
+		</script>
+	</head>
+	<body>
+	<!--产品列表 start-->
+	<form id="form1">
+			<input type="hidden" name="pagenum" id="pagenum">
+			<input type="hidden" name="pagesize" id="pagesize" value="12">
+			<!-- <input type="hidden" name="cid" id="cid" > -->
+	</form>
+	
+	<div class="prolist-box col-md-10">
+		<p class="top-guide">浏览记录</p>
+		<!-- 产品列表 start -->
+		<ul class="content hot-pro" id="prolist">
+
+		</ul>		
+		<!-- 产品列表 end -->
+		<nav aria-label="Page navigation" style="text-align: center">
+			<ul class="pagination">
+				
+			</ul>
+		</nav>
+		
+	</div>
+	<!--产品列表 end-->
+
+</body>
+</html>

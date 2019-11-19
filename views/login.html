@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>极客营欢迎你！</title>
+    <link rel="stylesheet" href="http://localhost:8080/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://localhost:8080/css/common.css">
+    <link rel="stylesheet" href="http://localhost:8080/css/index.css">
+    <link rel="stylesheet" href="http://localhost:8080/css/reset.css">
+    <script src="http://localhost:8080/js/jquery-3.4.1.min.js"></script>
+    <script src="http://localhost:8080/js/bootstrap.min.js"></script>
+    <script src="http://localhost:8080/js/template-web.js"></script>
+    <script src="http://localhost:8080/js/common.js"></script>
+    <script>
+        
+	    function index(){
+	        $("#msg").html("");
+	
+	        $.ajax({
+	            type: "post",
+	            url: "http://localhost:8080/igeek/login",
+	            data: $("#login-form").serialize(),
+	            dataType: "json",
+	            success: function (response) {
+	                if(response.succ){
+	                    alert(response.msg);
+	                    window.location.href='http://localhost:8080/static/index.html';
+	                }else{
+	                    $("#msg").html(response.msg);
+	                }
+	            }
+	        });
+	    }
+        function getcaptcha(){
+            $("#yzmimg").attr("src","http://localhost:8080/igeek/captcha?r="+new Date().getTime());
+        }
+
+    </script>
+    <style>
+        .login-box {
+            height: 500px;
+        }
+        .login-box #loginBtn {
+            background: url(http://localhost:8080/img/images/login.gif) top left !important;
+            width: 100px;
+            color: #fff;
+            text-align: center;
+         }
+    </style>
+</head>
+<body>
+
+    <!-- 登陆表单 start -->
+    <section class="login-box">
+        <img src="../img/images/loginbg.jpg" alt="" class="login-bg">
+        <form class="form-horizontal login-form col-md-offset-7 col-md-3" id="login-form">
+            <h4>会员登陆 <span>USER LOGIN</span></h4>
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-3 control-label">用户名</label>
+                <div class="col-sm-8">
+                    <input type="useName" class="form-control" id="loginname" name="loginname" placeholder="请输入用户名">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-3 control-label">密码</label>
+                <div class="col-sm-8">
+                    <input type="password" class="form-control" id="loginpwd" name="loginpwd" placeholder="请输入密码">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-3 control-label">验证码</label> 
+                <div class="col-sm-5">
+                    <input type="vCode" class="form-control" id="yzm" name="yzm" placeholder="请输入验证码">
+                </div>
+                <div class="col-sm-4 p0">
+                    <img id="yzmimg" src="http://localhost:8080/igeek/captcha" width="67" height="35" onclick="getcaptcha()"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-3 col-sm-8">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"> 记住用户名
+                    </label>
+                </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <button type="button" class="btn btn-default " id="loginBtn" onclick="index()">登录</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-6 col-md-offset-3" style="color: red" id="msg">
+                    &nbsp;
+                </div>
+            </div>
+        </form>
+                  
+    </section>
+    <!-- 登陆表单 end -->
+
+</body>
+</html>

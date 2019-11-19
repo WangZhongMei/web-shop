@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>极客营欢迎你！</title>
+		<link rel="stylesheet" href="http://localhost:8080/css/bootstrap.min.css"/>
+		<script src="http://localhost:8080/js/jquery-3.4.1.min.js" type="text/javascript"></script>
+		<script src="http://localhost:8080/js/bootstrap.min.js" type="text/javascript"></script>
+		<link rel="stylesheet" href="http://localhost:8080/css/index.css">
+		<link rel="stylesheet" href="http://localhost:8080/css/common.css">
+		<link rel="stylesheet" href="http://localhost:8080/css/reset.css">
+		<script src="http://localhost:8080/js/template-web.js"></script>
+		<script src="http://localhost:8080/js/common.js"></script>
+			<style>
+			.ct{
+				width: 60%;
+			}
+			* {
+				margin: 0px;
+				padding: 0px;
+			}
+			.table1 tr th{
+				padding: 10px;
+				text-align: right;
+			}
+			.table1 tr td{
+				padding-left: 20px;
+				padding-bottom: 10px;
+				padding-top: 10px;
+			}
+			h5{
+				font-weight: bold;
+				margin-bottom: 0px;
+				margin-top: 30px;
+			}
+			.alltotal{
+				text-align: right;
+				margin-right: 10px;
+			}
+			.alltotal1{
+				color: #FF7A1F;
+				font-weight: bold;
+			}
+			.orderbtn{
+				height: 27px;
+				width: 105px;
+				background: #D1062D;
+				color: white;
+			}
+			.gorder{
+				text-align: right;
+			}
+			.sjname{
+				color: blue;
+			}
+			.img1{
+				width: 75px;
+				height: 65px;
+			}
+		</style>
+		<script type="text/html" id="productTempl">
+			<tr>
+				<td><img class="img1" src="http://localhost:8080/img/{{pimage}}"></td>
+				<td><span class="sjname">{{pdesc}}</span></td>
+				<td class="shop_price">￥{{shop_price}}</td>
+				<td class="num">{{number}}</td>
+				<td>￥<span class="total">{{allmoney}}</span></td>
+			</tr>
+		</script>
+		<script>
+			$(function(){
+				console.log("aaaa");
+				$.ajax({
+					type: "post",
+					url: "http://localhost:8080/igeek/temlAll",
+					/* data: "data",
+					dataType: "dataType", */
+					dataType: "json",
+					success: function (data) {
+						console.log(data);
+						for(var i=0;i<data.length;i++){
+							var html = template("productTempl",data[i]);
+							$("#tbody").append(html);
+						}
+						let tolMoney=0;
+						let total=document.getElementsByClassName("total");
+						for(var i=0;i<total.length;i++){
+							tolMoney+=parseInt($(total[i]).html());
+						}
+						$("#all").html(tolMoney);
+					}
+				});
+			});
+			function myorder(){
+				var now = new Date();
+				var year = now.getFullYear();//年
+				var month = now.getMonth() + 1;//月  (注意：月份+1)
+				var date = now.getDate();//日
+				if (month < 10) {
+				month = "0" + month;
+				}
+				if (date < 10) {
+				date = "0" + date;
+				}
+				var b = now.getHours();
+				var c = now.getMinutes();
+				var d = now.getSeconds();
+				if (b < 10) {
+					b = "0" + b;
+				}
+				if (c < 10) {
+					c = "0" + c;
+				}
+				if (d< 10) {
+					d = "0" + d;
+				}
+				console.log (year + "-" + month + "-" + date,b +":" + c+":"+d);
+				$("#myLocalDate").val(year + "-" + month + "-" + date+"\u00A0"+b +":" + c+":"+d);
+
+				
+				$("#msg").html("");
+				let params = serializeForm($("#form1"));
+				let jsonstr = JSON.stringify(params);
+				console.log(jsonstr);
+				// let userid=$("#user_id").val();
+				$.ajax({
+					type: "post",
+					url: "http://localhost:8080/igeek/order",
+					data: jsonstr,
+					dataType: "json",
+					contentType: "application/json",
+					success: function (data) {
+						if (data.succ) {
+							alert(data.msg);
+							//跳转到查询页面
+							// window.location.href = "http://localhost:8080/static/myorders.html";
+						} else {
+							$("#msg").html(data.msg);
+						}
+					}
+				});
+			}
+
+			function serializeForm(form){
+				var obj = {};
+				$.each(form.serializeArray(),function(index){
+					if(obj[this['name']]){
+						obj[this['name']] = obj[this['name']] + ','+this['value'];
+					} else {
+						obj[this['name']] =this['value'];
+					}
+				});
+				return obj;
+			}
+		</script>
+	</head>
+	<body>
+		<div class="container ct">
+			<div>
+				<h5>商品清单</h5>
+				<table class="table table-bordered ">
+					<!-- <tr><th colspan="5">商品清单</th></tr> -->
+					<thead>
+						<tr class="warning">
+							<th>图片</th>
+							<th>商品</th>
+							<th>价格</th>
+							<th>数量</th>
+							<th>小计</th>
+						</tr>
+					</thead>
+					<tbody id="tbody">
+
+					</tbody>
+
+				</table>
+				<div class="alltotal">商品金额：￥<span class="alltotal1" id="all"></span>元</div>
+			</div>
+			<hr>
+			<div >
+				<form class="form-horizontal" id="form1">
+					<input type="hidden" id="myLocalDate" name="myLocalDate" value="">
+					<input type="hidden" name="userid" id="userid" value="zs" >
+					<table class="table1 ">
+						<tr>
+							<th >地址</th>
+							<td><input type="text" value="" name="shippingAddress" id="shippingAddress" class="form-control" placeholder="请输入收货地址"></td>
+						</tr>
+						<tr>
+							<th >收货人</th>
+							<td><input type="text" value="" name="username" id="username" class="form-control" placeholder="请输入收货人"></td>
+						</tr>
+						<tr>
+							<th >电话</th>
+							<td><input type="text" value="" name="phone" id="phone" class="form-control" placeholder="请输入联系方式"></td>
+						</tr>
+					</table>
+					
+				</form>
+			</div>
+			<div class="form-group">
+				<div class="col-md-8 col-md-offset-3" style="color: red" id="msg">
+					&nbsp;
+				</div>
+			</div>
+			<hr>
+			<div class="gorder">
+				<input type="button" value="生成订单" class="orderbtn" onclick="myorder()">
+			</div>
+
+		</div>
+	</body>
+</html>

@@ -1,0 +1,75 @@
+* {
+    margin: 0px;
+    padding: 0px;
+}
+.shopCon {
+    width: 1000px;
+    margin: 30px auto;
+}
+table {
+    width: 900px;
+}
+.btn-deladd {
+    width: 30px;
+
+}
+.trOne-font{
+    font-weight: 800;
+    font-size: 18px;
+}
+.tr-1{
+    background-color: #FCF8E3;
+
+}
+.btn2{
+    width: 50px;
+    text-align: center;
+    border-right: 0px;
+    border-left: 0px;
+}
+.col-F5F5F5{
+    background-color: #f5f5f5;
+}
+.font{
+    font-weight: 550;
+    font-size: 16px;
+}
+.img{
+    width: 50px;
+    height: 50px;
+}
+.one-right{
+    margin-bottom: 20px;
+
+}
+.one-right i{
+    color: #FF7638;
+    margin-right: 10px;
+}
+.one-right span span {
+    color: #FF6F10;
+    font-weight: 700;
+}
+.two-right,.one-right{
+    font-size: 17px;
+    font-weight: 500;
+    margin-right: 40px;
+}
+.two-right a{
+    line-height: 43px;
+}
+.btn2{
+    border:3px #DDD solid;
+    border-radius: 0px;
+    width: 120px;
+    height: 43px;
+    background-color: red;
+    font-size: 18px;
+    font-weight: 500;
+    color: #fff;
+    border-bottom:3px #898989 solid;
+}
+.btnsize{
+    width: 40px;
+    text-align: center;
+}

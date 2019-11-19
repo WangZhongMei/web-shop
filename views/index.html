@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>极客营欢迎你！</title>
+    <link rel="stylesheet" href="http://localhost:8080/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://localhost:8080/css/common.css">
+    <link rel="stylesheet" href="http://localhost:8080/css/index.css">
+    <link rel="stylesheet" href="http://localhost:8080/css/swiper.css"><!-- 轮播图 -->
+    <link rel="stylesheet" href="http://localhost:8080/css/reset.css">
+    <script src="http://localhost:8080/js/jquery-3.4.1.min.js"></script>
+    <script src="http://localhost:8080/js/bootstrap.min.js"></script>
+    <script src="http://localhost:8080/js/swiper.js"></script><!-- 轮播图 -->
+    <script src="http://localhost:8080/js/template-web.js"></script>
+    <script src="http://localhost:8080/js/common.js"></script>
+
+    <script type="text/html" id="hotproTempl">
+        <li class="col-md-6">
+          <a href="javascript:(0);" id="pro_a">
+            <img src="http://localhost:8080/img/products/hao/middle01.jpg" class="pro-img1" alt="" />
+          </a>
+        </li>
+       {{each prolist}}
+        <li class="col-md-2">
+          <a href="javascript:(0);" onclick="prodetails('{{$value.pid}}')">
+            <img src="http://localhost:8080/img/{{$value.pimage}}" alt="" />
+            <p>{{$value.pname}}</p>
+            <p>￥<span id="proPrice">{{$value.shop_price}}</span></p>
+          </a>
+        </li>
+        {{/each}}
+    </script>
+    <script type="text/html"  id="newproTempl">
+      <li class="col-md-6">
+        <a href="javascript:(0);" id="pro_a">
+          <img src="http://localhost:8080/img/products/hao/middle01.jpg" class="pro-img1" alt="" />
+        </a>
+      </li>
+     {{each prolist}}
+      <li class="col-md-2">
+        <a href="javascript:(0);" onclick="prodetails('{{$value.pid}}')">
+          <img src="http://localhost:8080/img/{{$value.pimage}}" alt="" />
+          <p>{{$value.pname}}</p>
+          <p>￥<span id="proPrice">{{$value.shop_price}}</span></p>
+        </a>
+      </li>
+      {{/each}}
+  </script>
+  <script>
+
+        function prodetails(pid){
+            window.location.href="http://localhost:8080/static/proDetails.html?bid="+pid;
+        };
+        
+        $(function(){
+            $.ajax({
+                type: "get",
+                url: "http://localhost:8080/igeek/prolisthot",
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    //根据data数据和bookTempl模板来渲染动态数据
+                    var html = template("hotproTempl",data);
+                    //console.log(html);
+                    $("#hotpro").append(html);
+                }
+            });
+        });        
+
+        $(function(){
+            $.ajax({
+                type: "get",
+                url: "http://localhost:8080/igeek/prolistnew",
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    //根据data数据和bookTempl模板来渲染动态数据
+                    var html = template("newproTempl",data);
+                    //console.log(html);
+                    $("#newpro").append(html);
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    
+  <!-- 轮播图 start -->
+    <!-- Swiper -->
+    <div class="container swiper">
+      <div class="swiper-container">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="http://localhost:8080/img/img/1.jpg" alt=""></div>
+            <div class="swiper-slide"><img src="http://localhost:8080/img/img/2.jpg" alt=""></div>
+            <div class="swiper-slide"><img src="http://localhost:8080/img/img/3.jpg" alt=""></div>
+            <div class="swiper-slide"><img src="http://localhost:8080/img/img/bartlesvillecf.jpg" alt=""></div>
+            <div class="swiper-slide"><img src="http://localhost:8080/img/img/emancipation.jpg" alt=""></div>
+            <div class="swiper-slide"><img src="http://localhost:8080/img/img/okwu.jpg" alt=""></div>
+            <div class="swiper-slide"><img src="http://localhost:8080/img/img/okwu-athletics.jpg" alt=""></div>
+          </div>
+          <!-- Add Arrows -->
+          <div class="swiper-button-next"></div>
+          <div class="swiper-button-prev"></div>
+          <!-- Add Pagination -->
+          <div class="swiper-pagination"></div>
+      </div>
+    </div>
+  <!-- 轮播图 end -->
+
+    <!-- 热门商品 start-->
+    <section class="container p0">
+      <div class="pro-title">
+        <h4>热门商品</h4><img src="http://localhost:8080/img/img/title2.jpg" alt="">
+      </div>
+      <div class="row  hot-pro">
+        <div class="col-md-2">
+            <a href=""><img src="http://localhost:8080/img/products/hao/big01.jpg" alt=""></a>
+        </div>
+        <div class="col-md-10" id="hotpro">
+        </div>
+      </div>
+    </section>
+    <!-- 热门商品 end-->
+
+    <div class="container p0">
+      <img src="http://localhost:8080/img/products/hao/ad.jpg" alt="" class="width100 img-ad">
+    </div>
+
+    <!-- 最新商品 start-->
+    <section class="container p0">
+      <div class="pro-title">
+        <h4>最新商品</h4><img src="http://localhost:8080/img/img/title2.jpg" alt="">
+      </div>
+      <div class="row  hot-pro">
+        <div class="col-md-2">
+          <a href=""><img src="http://localhost:8080/img/products/hao/big01.jpg" alt=""></a>
+      </div>
+      <div class="col-md-10" id="newpro">
+      </div>
+    </div>
+    </section>
+    <!-- 最新商品 end-->
+    <script src="http://localhost:8080/js/banner.js"></script>
+
+</body>
+</html>

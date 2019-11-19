@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>极客营欢迎你！</title>
+    <!-- 导入bootstrap的外部文件 -->
+    <link rel="stylesheet" href="http://localhost:8080/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="http://localhost:8080/css/proDetails.css"/>
+    <link rel="stylesheet" href="http://localhost:8080/fonts/glyphicons-halflings-regular.svg">
+    <script src="http://localhost:8080/js/jquery-3.4.1.min.js" type="text/javascript"></script>
+    <script src="http://localhost:8080/js/bootstrap.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="http://localhost:8080/css/common.css">
+    <link rel="stylesheet" href="http://localhost:8080/css/reset.css">
+    <link rel="stylesheet" href="http://localhost:8080/fonts/iconfont.css">
+    <script src="http://localhost:8080/js/template-web.js"></script>
+    <script src="http://localhost:8080/js/common.js"></script>
+    <script id="proTempl" type="text/html">
+        <div class="row">
+                <form id="form1">
+                <input type="hidden" id="pid" name="pid" value="{{pid}}"/>               
+            <div class="col-md-6">
+                    <img src="http://localhost:8080/img/{{pimage}}" alt="加载中" class="img-one">
+            </div>
+            <div class="col-md-5">                
+                <table class="table tableOne">
+                    <tr>
+                        <td>
+                            <p class="fontw-fonts">{{pname}}</p>
+                            <p class="mar-bo">{{pid}}</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>商城价：
+                                <span class="spanOne fontw-fonts">￥{{shop_price}}元/份</span>
+                                参考价：
+                                <del class="spanTwo">￥{{market_price}}元/份</del>
+                            </p>
+                            <p>促销：
+                                <span class="xsqg">限时抢购</span>
+                            </p>
+                            <div class="table-div">
+                                <table class="table tableTwo">
+                                    <tr>
+                                        <td class="padding">
+                                            购买数量：
+                                            <!-- <input type="text" name="" id="input2" class="" value="" required="required" pattern="" title=""> -->
+                                            <input type="button" value="-" class="btn-deladd btn-del" style="width:20px"><input
+                                                type="text" value="1" class="btn-con btnsize" id="input2" style="width:30px"><input
+                                                type="button" value="+" class="btn-deladd btn-add" style="width:20px">
+                                        </td>
+                                    </tr>
+                                    <tr >
+                                        <td class="lineheight">
+                                               
+                                            <button type="button" class="btns" onclick="add()"> <i class="icon iconfont icon-gouwuche2"></i>加入购物车</button>
+                                            收藏商品
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="back">
+                                <a href="http://localhost:8080/static/prolist.html?cid={{cid}}">返回</a>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div> 
+        </form>      
+        </div>
+    </script>
+    <script id="navTempl" type="text/html">
+        <div class="row navs">
+                <div class="col-md-12">
+                    <ol class="breadcrumb">
+                        <li><a href="http://localhost:8080/static/index.html">首页></a></li>
+                        <li><a href="http://localhost:8080/static/prolist.html?cid={{cid}}">{{cname}}></a></li>
+                        <li class="active"><a href="javascript:void(0)">{{pname}}</a></li>
+                    </ol>
+                </div>
+            </div>
+    </script>
+    <script>
+        $(function(){
+            let serach = window.location.search;
+            let params = serach.substr(1,serach.length-1).split("=");
+            console.log(params);
+            $.ajax({
+                type: "get",
+                url: "http://localhost:8080/igeek/"+params[1],
+                // data:$("#form1").serialize(),
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);                
+                    if(data.succ){
+                        //console.log(data.productinfo.number);
+                        var html = template("proTempl",data.productinfo);
+                        var html1=template("navTempl",data.productinfo);
+                        $("#box").append(html);
+                        $("#navbox").append(html1);
+                        btn();
+                    }
+                }
+            });
+        })
+        function btn(){
+            console.log("111");
+            $(".btn-del").click(function(){
+                let del=$(this).next(".btnsize").val();
+                console.log(del);
+                if(del==1){
+                    $(this).next(".btnsize").val("1");
+                    let price=$(this).parent().prev(".shop_price").html();
+                    $(this).parent().next().find(".money").html(price);
+                    alert("至少加购一件商品！");
+                }else{
+                    del--;
+                    $(this).next(".btnsize").val(del);
+                    let price=$(this).parent().prev(".shop_price").html();
+                    $(this).parent().next().find(".money").html(price*del);
+                }
+            });
+            $(".btn-add").click(function(){
+                let add=$(this).prev(".btnsize").val();
+                if(add==100){
+                    $(this).prev(".btnsize").val("100");
+                    let price=$(this).parent().prev(".shop_price").html();
+                    $(this).parent().next().find(".money").html(price*100);
+                    alert("限购一百件商品！");
+                }else{
+                    add++;
+                    $(this).prev(".btnsize").val(add);
+                    let price=$(this).parent().prev(".shop_price").html();
+                    $(this).parent().next().find(".money").html(price*add);
+                }
+            });
+        }
+
+        function add(){
+            let pid=$("#pid").val();
+            let number= $("#input2").val();
+            $.ajax({
+                type: "post",
+                url: "http://localhost:8080/igeek/addcart",
+                data:{pid:pid,number:number},
+                dataType: "json",
+                success: function (data) {
+                    alert(data.msg);
+                    console.log(data);
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="proDetails">
+        <!-- 第一个导航栏目 -->
+        <div id="navbox"></div>
+        
+        <div id="box">
+        </div>
+        <!-- 第二个导航栏目 -->
+        <div class="row navs">
+            <div class="col-md-12">商品介绍</div>
+        </div>
+        <div class="row">
+            <div class="col-md-9">.
+                <img src="http://localhost:8080/img/\image\r___________renleipic_01/bigPic139f030b-d68b-41dd-be6d-b94cc568d3c5.jpg" class="imgTwo" alt="加载中">
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+        <!-- 第三个导航栏目 -->
+        <div class="row navs">
+            <div class="col-md-12">商品参数</div>
+        </div>
+        <div class="row">
+            <!-- <div class="col-md-12"> -->
+                <table class="table table-bordered table-three ">
+                    <tr class="active">
+                        <td colspan="2" class="fontw-fonts">基本参数</td>
+                    </tr>
+                    <tr>
+                        <td class="fontw-fonts">级别</td>
+                        <td>标准</td>
+                    </tr>
+                    <tr>
+                        <td class="fontw-fonts">标重</td>
+                        <td>500</td>
+                    </tr>
+                    <tr>
+                        <td class="fontw-fonts">浮动</td>
+                        <td>200</td>
+                    </tr>
+                </table>
+            <!-- </div> -->
+            <!-- <div class="col-md-12"> -->
+                <table class="table table-bordered table-all">
+                    <tr class="active">
+                        <td class="fontw-fonts">商品评论</td>
+                    </tr>
+                    <tr class="colFCF8E3">
+                        <td class="fontw-fonts">暂无商品评论信<span class="span-blue">[发表商品评论信息]</span></td>
+                    </tr>
+                </table>
+            <!-- </div> -->
+            <!-- <div class="col-md-12"> -->
+                <table class="table table-bordered table-all">
+                    <tr class="active">
+                        <td class="fontw-fonts">商品咨询</td>
+                    </tr>
+                    <tr class="colFCF8E3">
+                        <td class="fontw-fonts">暂无商品评论信<span class="span-blue">[发表商品咨询]</span></td>
+                    </tr>
+                </table>
+            <!-- </div>   -->
+        </div>
+    </div>
+</body>
+</html>

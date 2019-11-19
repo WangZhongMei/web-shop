@@ -1,0 +1,40 @@
+/* 头部 start */
+.top {
+    height: 58px;
+}
+.top .top-right {
+    line-height: 58px;
+}
+.top .top-right a{
+    color:#86A3C4;
+    margin-right: 8px;
+}
+.navbar-inverse .navbar-nav>.active>a, 
+.navbar-inverse .navbar-nav>.active>a:focus, 
+.navbar-inverse .navbar-nav>.active>a:hover {
+    font-size: 18px;
+    color: #9d9d9d;
+    background: none!important;
+}
+/* 头部 end */
+
+
+
+/* 尾部 start */
+.img-foot {
+    margin-top: 14px;
+}
+.foot-nav {
+    text-align: center;
+}
+.foot-nav a {
+    color: #86A3C4;
+    margin: 0 8px;
+    line-height: 24px;
+
+}
+footer p {
+    text-align: center;
+    margin-bottom: 14px;
+}
+/* 尾部 end */

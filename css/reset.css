@@ -1,0 +1,62 @@
+@charset "utf-8";
+*{padding: 0;margin: 0;}
+body,div,dl,dt,dd,ul,li,h1,h2,h3,h4,h5,h6,input,form,a,p, textarea {
+	margin: 0;
+	padding: 0;
+	color: #383838;
+}
+body{font:14px/180% 微软雅黑, Helvetica, sans-serif, "新宋体";}
+
+a {
+    text-decoration: none;
+    transition:all 0.2s linear 0s;
+    color: #383838;
+}
+a:hover {
+	color:#CC4226;
+	text-decoration: none;
+}
+a,p,h1,h2,h3,h4,h5,h6 {
+	color: #383838;
+	padding: 0;
+	margin: 0;
+}
+h1, h2, h3 {
+	padding: 0;
+	margin: 0;
+}
+
+ol, ul, li {
+	list-style: none;
+	transition: all 0.3s;
+	margin: 0;
+	padding: 0;
+}
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+}
+img {
+	border: none;
+}
+@media (min-width: 3260px) {
+  .container{
+  width: 1230px;
+  }
+}
+
+.p0{
+	padding: 0;
+}
+.m0 {
+	margin: 0;
+}
+.mr0 {
+	margin-right: 0;
+}
+.fff {
+	color: #fff!important;
+}
+.width100 {
+	width: 100%;
+}
